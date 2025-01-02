@@ -11,6 +11,12 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { SignIn } from "../lib/actions";
 import { useFormStatus } from "react-dom";
+import { AlertCircle } from "lucide-react"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 const initialState = {
   error: "",
@@ -20,10 +26,8 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  
   const { pending } = useFormStatus();
   const [state, formAction] = useActionState(SignIn, initialState);
-  console.log(state.error)
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -40,6 +44,17 @@ export function LoginForm({
                 </p>
               </div>
               <div className="grid gap-2">
+
+                {state.error !== "" && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      {state.error}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -47,7 +62,6 @@ export function LoginForm({
                   type="email"
                   className="py-2 px-3 text-sm"
                   placeholder="youraccount@example.com"
-                  required
                 />
               </div>
               <div className="grid gap-2">
@@ -64,7 +78,6 @@ export function LoginForm({
                   id="password"
                   type="password"
                   name="password"
-                  required
                   className="text-sm px-3 py-2"
                   placeholder="***********"
                 />
